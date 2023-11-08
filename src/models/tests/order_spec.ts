@@ -25,7 +25,7 @@ describe('Order Model', () => {
             user_id: 1,
         });
         expect(result).toEqual({
-            id: 1,
+            id: 2,
             complete: false,
             user_id: 1,
         });
@@ -35,7 +35,7 @@ describe('Order Model', () => {
         const result = await orderStore.index();
         expect(result).toEqual([
             {
-                id: 1,
+                id: 2,
                 complete: false,
                 user_id: 1,
             },
@@ -43,16 +43,16 @@ describe('Order Model', () => {
     });
 
     it('show method should return the correct order', async () => {
-        const result = await orderStore.show(1);
+        const result = await orderStore.show(2);
         expect(result).toEqual({
-            id: 1,
+            id: 2,
             complete: false,
             user_id: 1,
         });
     });
 
     it('delete method should remove the order', async () => {
-        await orderStore.delete(1);
+        await orderStore.delete(2);
         const result = await orderStore.index();
         expect(result).toEqual([]);
     });

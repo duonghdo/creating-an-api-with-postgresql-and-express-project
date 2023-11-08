@@ -26,7 +26,7 @@ describe("User Model", () => {
             password: 'pw1234',
         });
         expect(result).toEqual({
-            id: 1,
+            id: 2,
             firstname: 'John',
             lastname: 'Doe',
             password: 'pw1234',
@@ -37,7 +37,7 @@ describe("User Model", () => {
         const result = await userStore.index();
         expect(result).toEqual([
             {
-                id: 1,
+                id: 2,
                 firstname: 'John',
                 lastname: 'Doe',
                 password: 'pw1234',
@@ -46,9 +46,9 @@ describe("User Model", () => {
     });
 
     it("show method should return the correct user", async () => {
-        const result = await userStore.show(1);
+        const result = await userStore.show(2);
         expect(result).toEqual({
-            id: 1,
+            id: 2,
             firstname: 'John',
             lastname: 'Doe',
             password: 'pw1234',
@@ -56,7 +56,7 @@ describe("User Model", () => {
     });
 
     it("delete method should remove the user", async () => {
-        await userStore.delete(1);
+        await userStore.delete(2);
         const result = await userStore.index();
         expect(result).toEqual([]);
     });
