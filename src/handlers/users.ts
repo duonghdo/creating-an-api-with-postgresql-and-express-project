@@ -1,5 +1,11 @@
 import express, { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 import { User, UserStore } from '../models/user';
+import { verifyToken } from './verifyToken';
+
+const {
+    TOKEN_SECRET
+} = process.env;
 
 const userStore = new UserStore();
 
@@ -32,7 +38,8 @@ const create = async (req: Request, res: Response) => {
         };
 
         const newUser = await userStore.create(user);
-        res.json(newUser);
+        const token = jwt.sign({ user: newUser }, TOKEN_SECRET as string);
+        res.json(token);
     } catch (err) {
         res.status(400);
         res.json(err);
@@ -63,10 +70,10 @@ const authenticate = async (req: Request, res: Response) => {
 }
 
 const userRoutes = (app: express.Application) => {
-    app.get('/users', index);
-    app.get('/users/:id', show);
+    app.get('/users', verifyToken, index);
+    app.get('/users/:id', verifyToken, show);
     app.post('/users', create);
-    app.delete('/users/:id', destroy);
+    app.delete('/users/:id', verifyToken, destroy);
     app.post('/users/authenticate', authenticate);
 }
 

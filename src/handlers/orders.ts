@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { Order, OrderStore } from '../models/order';
+import { verifyToken } from './verifyToken';
 
 const orderStore = new OrderStore();
 
@@ -50,9 +51,9 @@ const destroy = async (req: Request, res: Response) => {
 
 const orderRoutes = (app: express.Application) => {
     app.get('/orders', index);
-    app.get('/orders/:id', show);
-    app.post('/orders', create);
-    app.delete('/orders/:id', destroy);
+    app.get('/orders/:id', verifyToken, show);
+    app.post('/orders', verifyToken, create);
+    app.delete('/orders/:id', verifyToken, destroy);
 }
 
 export default orderRoutes;

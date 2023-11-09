@@ -40,7 +40,7 @@ describe("User Model", () => {
     });
 
     it("show method should return the correct user", async () => {
-        const result = await userStore.show(2);
+        const result = await userStore.show(5);
         expect(result.firstname).toEqual('John');
         expect(result.lastname).toEqual('Doe');
     });
@@ -51,7 +51,7 @@ describe("User Model", () => {
     });
 
     it("delete method should remove the user", async () => {
-        await userStore.delete(2);
+        await userStore.delete(5);
         const result = await userStore.index();
         expect(result).toEqual([]);
     });
