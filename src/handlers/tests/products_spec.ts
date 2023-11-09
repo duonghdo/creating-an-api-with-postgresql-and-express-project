@@ -34,12 +34,12 @@ describe("Test products endpoints responses", () => {
     });
 
     it("get /products/:id endpoint", async () => {
-        const response = await request.get("/products/1");
+        const response = await request.get("/products/2");
         expect(response.status).toBe(200);
     });
 
     it("delete /products/:id endpoint", async () => {
-        const response = await request.delete("/products/1").set('Authorization', 'Bearer ' + token);
+        const response = await request.delete("/products/2").set('Authorization', 'Bearer ' + token);
         expect(response.status).toBe(200);
     });
 });

@@ -1,8 +1,21 @@
 import { Order, OrderStore } from '../order';
+import { ProductStore } from '../product';
 
 const orderStore = new OrderStore();
+const productStore = new ProductStore();
 
 describe('Order Model', () => {
+    beforeAll(async () => {
+        const testProduct = await productStore.create({
+            name: 'test product',
+            price: 100,
+        });
+    });
+
+    afterAll(async () => {
+        await productStore.delete(3);
+    });
+
     it('should have an index method', () => {
         expect(orderStore.index).toBeDefined();
     });
@@ -49,6 +62,16 @@ describe('Order Model', () => {
             complete: false,
             user_id: 1,
             items: [],
+        });
+    });
+
+    it('addProduct method should add a product to the order', async () => {
+        const result = await orderStore.addProduct(2, 2, 3);
+        expect(result).toEqual({
+            id: 1,
+            quantity: 2,
+            order_id: 2,
+            product_id: 3,
         });
     });
 
