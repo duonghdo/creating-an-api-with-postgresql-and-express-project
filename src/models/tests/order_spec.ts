@@ -48,6 +48,7 @@ describe('Order Model', () => {
             id: 2,
             complete: false,
             user_id: 1,
+            items: [],
         });
     });
 

@@ -1,9 +1,11 @@
 import Client from '../database';
+import { Product } from './product';
 
 export type Order = {
     id?: number;
     user_id: number;
     complete: boolean;
+    items?: Product[];
 };
 
 export class OrderStore {
@@ -24,8 +26,12 @@ export class OrderStore {
             const conn = await Client.connect();
             const sql = 'SELECT * FROM orders WHERE id=($1)';
             const result = await conn.query(sql, [id]);
+            const order = result.rows[0];
+            const sql2 = 'SELECT * FROM order_items WHERE order_id=($1)';
+            const result2 = await conn.query(sql2, [id]);
+            order.items = result2.rows;
             conn.release();
-            return result.rows[0];
+            return order;
         } catch (err) {
             throw new Error(`Could not find order ${id}. Error: ${err}`);
         }
