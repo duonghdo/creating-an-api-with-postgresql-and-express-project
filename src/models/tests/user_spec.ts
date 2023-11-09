@@ -19,40 +19,35 @@ describe("User Model", () => {
         expect(userStore.delete).toBeDefined();
     });
 
+    it("should have an authenticate method", () => {
+        expect(userStore.authenticate).toBeDefined();
+    });
+
     it("create method should add a user", async () => {
         const result = await userStore.create({
             firstname: 'John',
             lastname: 'Doe',
             password: 'pw1234',
         });
-        expect(result).toEqual({
-            id: 2,
-            firstname: 'John',
-            lastname: 'Doe',
-            password: 'pw1234',
-        });
+        expect(result.firstname).toEqual('John');
+        expect(result.lastname).toEqual('Doe');
     });
 
     it("index method should return a list of users", async () => {
         const result = await userStore.index();
-        expect(result).toEqual([
-            {
-                id: 2,
-                firstname: 'John',
-                lastname: 'Doe',
-                password: 'pw1234',
-            },
-        ]);
+        expect(result[0].firstname).toEqual('John');
+        expect(result[0].lastname).toEqual('Doe');
     });
 
     it("show method should return the correct user", async () => {
         const result = await userStore.show(2);
-        expect(result).toEqual({
-            id: 2,
-            firstname: 'John',
-            lastname: 'Doe',
-            password: 'pw1234',
-        });
+        expect(result.firstname).toEqual('John');
+        expect(result.lastname).toEqual('Doe');
+    });
+
+    it("authenticate method should return the correct user", async () => {
+        const result = await userStore.authenticate('John', 'Doe', 'pw1234');
+        expect(result).not.toBeNull();
     });
 
     it("delete method should remove the user", async () => {

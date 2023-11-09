@@ -1,5 +1,10 @@
-import e from "express";
 import Client from "../database";
+import bcrypt from 'bcrypt';
+
+const {
+    BCRYPT_PASSWORD,
+    SALT_ROUNDS,
+} = process.env;
 
 export type User = {
     id?: number;
@@ -37,7 +42,10 @@ export class UserStore {
         try {
             const conn = await Client.connect();
             const sql = 'INSERT INTO users (firstname, lastname, password) VALUES($1, $2, $3) RETURNING *';
-            const result = await conn.query(sql, [u.firstname, u.lastname, u.password]);
+
+            const hash = bcrypt.hashSync(u.password+BCRYPT_PASSWORD, parseInt(SALT_ROUNDS as string));
+
+            const result = await conn.query(sql, [u.firstname, u.lastname, hash]);
             const user = result.rows[0];
             conn.release();
             return user;
@@ -56,6 +64,24 @@ export class UserStore {
             return user;
         } catch (err) {
             throw new Error(`Could not delete user ${id}. Error: ${err}`);
+        }
+    }
+
+    async authenticate(firstname: string, lastname:string, password: string): Promise<User | null> {
+        try {
+            const conn = await Client.connect();
+            const sql = 'SELECT password FROM users WHERE firstname=($1) AND lastname=($2)';
+            const result = await conn.query(sql, [firstname, lastname]);
+            conn.release();
+            if (result.rows.length) {
+                const user = result.rows[0];
+                if (bcrypt.compareSync(password+BCRYPT_PASSWORD, user.password)) {
+                    return user;
+                }
+            }
+            return null;
+        } catch (err) {
+            throw new Error(`Could not authenticate user ${firstname}. Error: ${err}`);
         }
     }
 }

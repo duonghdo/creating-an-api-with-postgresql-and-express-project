@@ -9,7 +9,7 @@ describe("Test users endpoints responses", () => {
         const response = await request.post("/users/").send({
             firstname: "John",
             lastname: "Doe",
-            password: "password",
+            password: "pw1234",
         });
         expect(response.status).toBe(200);
     });
@@ -21,6 +21,15 @@ describe("Test users endpoints responses", () => {
 
     it("get /users/:id endpoint", async () => {
         const response = await request.get("/users/1");
+        expect(response.status).toBe(200);
+    });
+
+    it("post /users/authenticate endpoint", async () => {
+        const response = await request.post("/users/authenticate").send({
+            firstname: "John",
+            lastname: "Doe",
+            password: "pw1234",
+        });
         expect(response.status).toBe(200);
     });
 
